@@ -7,6 +7,8 @@ use std::io::{self, BufRead, LineWriter, Write};
 use std::path::Path;
 use log::{error, warn, info, debug, trace, log_enabled, Level};
 use dotenvy::dotenv;
+use plotters::prelude::*;
+use image::{ImageFormat, imageops::FilterType};
 
 // Returns an iterator over the lines of the file
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
