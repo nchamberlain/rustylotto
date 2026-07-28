@@ -59,7 +59,7 @@ fn gen_lotto_charts(csv_file: &str) -> Result<(), Box<dyn std::error::Error>> {
     )?
     .resize_exact(w - w / 10, h - h / 10, FilterType::Nearest); 
 
-    let lottoelem: BitMapElement<_> = (((0.05, 0.95), lottoimage)).into();
+    let lottoelem: BitMapElement<_> = ((0.05, 0.95), lottoimage).into();
 
     chart.draw_series(std::iter::once(lottoelem))?;
     let main_coords: [(i32, i32); 48] =
@@ -103,7 +103,7 @@ fn gen_lotto_charts(csv_file: &str) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn process_csv_file(csv_file: &str) -> Result<(), Box<dyn std::error::Error>> {
-    let file = File::create("csv_out.csv")?;
+    let file = File::create("csv/csv_out.csv")?;
     let mut line_writer = LineWriter::new(file);
     if let Ok(lines) = read_lines(csv_file) {
         for line in lines.flatten() {
@@ -117,7 +117,9 @@ fn process_csv_file(csv_file: &str) -> Result<(), Box<dyn std::error::Error>> {
                 let ndout: String = format!("{}", ndin.format("%Y-%m-%d-%a").to_string());
 
                 // get the rest of the numbers being sure to remove the one dbl-quote embedded in slice
-                let nbr_slice: &str = &line[27..].replace("\"", "");
+                // also remove jackpot field
+                let comma_index = line.rfind(",");
+                let nbr_slice: &str = &line[27..comma_index.unwrap_or(line.len())].replace("\"", "");
 
                 debug!("Date: {} Numbers: {}", ndout, nbr_slice);
 
@@ -134,7 +136,9 @@ fn process_csv_file(csv_file: &str) -> Result<(), Box<dyn std::error::Error>> {
                 let ndout: String = format!("{}", ndin.format("%Y-%m-%d-%a").to_string());
 
                 // get the rest of the numbers being sure to remove the one dbl-quote embedded in slice
-                let nbr_slice: &str = &line[26..].replace("\"", "");
+                // also remove jackpot field
+                let comma_index = line.rfind(",");
+                let nbr_slice: &str = &line[26..comma_index.unwrap_or(line.len())].replace("\"", "");
 
                 debug!("Date= {} Numbers= {}", ndout, nbr_slice);
                 
