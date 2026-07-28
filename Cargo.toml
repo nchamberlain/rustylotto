@@ -5,7 +5,11 @@ edition = "2024"
 
 [dependencies]
 chrono = "0.4.45"
+colorize = "0.1.0"
 dotenvy = "0.15.7"
 env_logger = "0.11.11"
+# Have to stick with image 0.24.9 or DynamicImage.into BitMapElement FAILS
+image = "0.24.9"
+inquire = "0.9.4"
 log = "0.4.33"
 plotters = "0.3.7"
