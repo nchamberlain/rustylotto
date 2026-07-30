@@ -38,7 +38,7 @@ fn main() -> io::Result<()> {
         }
     }   
 
-    if let Ok(()) = process_csv_file("csv/slnumbers1.csv") {
+    if let Ok(()) = process_csv_file("csv/csv_in.csv") {
         let _ = gen_lotto_charts("csv/csv_out.csv");
     }
 
@@ -186,6 +186,8 @@ fn process_csv_file(csv_file: &str) -> Result<(), Box<dyn std::error::Error>> {
                 debug!("Date,C1,C2,C3,C4,C5,Mega");
                 let out_line = "Date,C1,C2,C3,C4,C5,Mega".to_string(); //new column headers
                 writeln!(line_writer, "{}", out_line).expect("Error writing column headers");
+            } else if line.trim().is_empty() { //skip blank lines
+                debug!("Blank line skipped");   
             } else {
                 eprintln!("Line NOT Recognized"); //should never happen
             }
